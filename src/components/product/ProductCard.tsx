@@ -31,8 +31,8 @@ export default function ProductCard({ product }: ProductCardProps) {
 				</h4>
 				<h5 className="text-gray-400">{product.category}</h5>
 				<p className="line-clamp-2">{product.description}</p>
-				<p>
-					{} - {}
+				<p className="text-sm text-gray-500">
+					⭐ {product.rating.rate} ({product.rating.count})
 				</p>
 			</div>
 			<div className="flex gap-2">
