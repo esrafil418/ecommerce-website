@@ -11,6 +11,7 @@ import Home from "./pages/home/Home";
 import Auth from "./pages/auth/Auth";
 import Checkout from "./pages/checkout/Checkout";
 import Navbar from "./components/navbar/Navbar";
+import ProductDetail from "./pages/products/ProductDetail";
 
 function HandlerRoutes() {
 	return (
@@ -35,6 +36,7 @@ export default function App() {
 								<Route path="/" element={<Home />} />
 								<Route path="/auth" element={<Auth />} />
 								<Route path="/checkout" element={<Checkout />} />
+								<Route path="/products/:id" element={<ProductDetail />} />
 							</Routes>
 						</div>
 					</HexclaveTheme>

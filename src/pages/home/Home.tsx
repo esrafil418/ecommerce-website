@@ -8,7 +8,7 @@ export default function Home() {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		fetch("https://fakestoreapi.com/products")
+		fetch("/api/products")
 			.then((response) => response.json())
 			.then((data) => {
 				setProducts(data);
