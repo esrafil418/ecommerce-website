@@ -31,7 +31,8 @@ export default function Auth() {
 			}
 		} catch (error) {
 			console.error("Authentication error", error);
-			alert("Error: " + (error as Error).message);
+			const message = getErrorMessage(error) || "Authentication failed";
+			alert(`Error: ${message}`);
 		}
 	}
 
@@ -110,10 +111,6 @@ export default function Auth() {
 									minLength: {
 										value: 6,
 										message: "Password must be at least 6 characters",
-									},
-									maxLength: {
-										value: 12,
-										message: "Password must be less than 12 characters",
 									},
 								})}
 							/>

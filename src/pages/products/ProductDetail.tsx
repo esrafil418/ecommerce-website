@@ -8,27 +8,30 @@ export default function ProductDetail() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
+		const controller = new AbortController();
 		async function fetchProduct() {
 			try {
 				const res = await fetch(`/api/products/${id}`, {
+					signal: controller.signal,
 					mode: "cors",
 					headers: {
 						"Content-Type": "application/json",
 					},
 				});
-
-				if (res.status === 404) {
+				if (!res.ok) {
 					navigate("/");
 					return;
 				}
-				const data = await res.json();
+				const data = (await res.json()) as Product;
 				setProduct(data);
 			} catch (error) {
+				if ((error as DOMException).name === "AbortError") return;
 				console.log("Error fetching product:", error);
 				navigate("/");
 			}
 		}
 		fetchProduct();
+		return () => controller.abort();
 	}, [id, navigate]);
 
 	if (!product) {
