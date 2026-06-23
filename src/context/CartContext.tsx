@@ -1,21 +1,51 @@
-import { createContext, useContext, useState } from "react";
-import type { ProductCardProps } from "../components/product/ProductCard";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
-const CartContext = createContext(null);
+interface CartItem {
+	id: number;
+	quantity: number;
+}
 
-export default function CartProvider({ product }: ProductCardProps) {
-	const [cartItem, setCartItem] = useState([]);
+interface CartContextType {
+	cartItem: CartItem[];
+	addToCart: (productId: number) => void;
+}
 
-	function addToCart( productId: number ) {
+interface CartProviderProps {
+	children: ReactNode;
+}
+
+const CartContext = createContext<CartContextType | null>(null);
+
+export default function CartProvider({ children }: CartProviderProps) {
+	const [cartItem, setCartItem] = useState<CartItem[]>([]);
+
+	function addToCart(productId: number) {
 		const existing = cartItem.find((item) => item.id === productId);
-		setCartItem();
+		if (existing) {
+			const updateCartItems = cartItem.map((item) =>
+				item.id === productId
+					? { id: productId, quantity: item.quantity + 1 }
+					: item,
+			);
+			setCartItem(updateCartItems);
+		} else {
+			setCartItem([...cartItem, { id: productId, quantity: 1 }]);
+		}
 	}
 
-	return <CartContext.Provider value={{}}>{children}</CartContext.Provider>;
+	return (
+		<CartContext.Provider value={{ cartItem, addToCart }}>
+			{children}
+		</CartContext.Provider>
+	);
 }
 
 export function useCart() {
 	const context = useContext(CartContext);
+
+	if (!context) {
+		throw new Error("useCart must be used within a CartProvider");
+	}
 
 	return context;
 }

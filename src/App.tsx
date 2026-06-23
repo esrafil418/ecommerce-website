@@ -12,6 +12,7 @@ import Auth from "./pages/auth/Auth";
 import Checkout from "./pages/checkout/Checkout";
 import Navbar from "./components/navbar/Navbar";
 import ProductDetail from "./pages/products/ProductDetail";
+import CartProvider from "./context/CartContext";
 
 function HandlerRoutes() {
 	return (
@@ -29,16 +30,18 @@ export default function App() {
 			<BrowserRouter>
 				<HexclaveProvider app={hexclaveClientApp}>
 					<HexclaveTheme>
-						<div className="min-h-screen flex flex-col">
-							<Navbar />
-							<Routes>
-								<Route path="/handler/*" element={<HandlerRoutes />} />
-								<Route path="/" element={<Home />} />
-								<Route path="/auth" element={<Auth />} />
-								<Route path="/checkout" element={<Checkout />} />
-								<Route path="/products/:id" element={<ProductDetail />} />
-							</Routes>
-						</div>
+						<CartProvider>
+							<div className="min-h-screen flex flex-col">
+								<Navbar />
+								<Routes>
+									<Route path="/handler/*" element={<HandlerRoutes />} />
+									<Route path="/" element={<Home />} />
+									<Route path="/auth" element={<Auth />} />
+									<Route path="/checkout" element={<Checkout />} />
+									<Route path="/products/:id" element={<ProductDetail />} />
+								</Routes>
+							</div>
+						</CartProvider>
 					</HexclaveTheme>
 				</HexclaveProvider>
 			</BrowserRouter>

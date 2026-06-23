@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 
 export interface Product {
 	id: number;
@@ -15,6 +16,12 @@ export interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+	const { addToCart, cartItem } = useCart();
+	const productInCart = cartItem.find((item) => item.id === product.id);
+
+	const productQuantityLabel = productInCart
+		? `(${productInCart.quantity})`
+		: "";
 	return (
 		<div className="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-200 hover:shadow-lg hover:scale-[1.02]">
 			<img
@@ -44,9 +51,10 @@ export default function ProductCard({ product }: ProductCardProps) {
 				</Link>
 				<button
 					type="button"
+					onClick={() => addToCart(product.id)}
 					className="bg-blue-600 text-white px-6 py-3 border-none rounded font-medium text-base cursor-pointer transition-colors duration-200 ease-in-out hover:scale-[1.01] no-underline inline-block text-center"
 				>
-					Add to Cart
+					Add to Cart {productQuantityLabel}
 				</button>
 			</div>
 		</div>

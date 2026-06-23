@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 import type { Product } from "../../components/product/ProductCard";
 
 export default function ProductDetail() {
 	const { id } = useParams();
 	const [product, setProduct] = useState<Product | null>(null);
 	const navigate = useNavigate();
+
+	const { addToCart, cartItem } = useCart();
 
 	useEffect(() => {
 		const controller = new AbortController();
@@ -34,6 +37,12 @@ export default function ProductDetail() {
 		return () => controller.abort();
 	}, [id, navigate]);
 
+	const productInCart = cartItem.find((item) => item.id === product.id);
+
+	const productQuantityLabel = productInCart
+		? `(${productInCart.quantity})`
+		: "";
+
 	if (!product) {
 		return <div>Loading product...</div>;
 	}
@@ -55,9 +64,10 @@ export default function ProductDetail() {
 						</p>
 						<button
 							type="button"
+							onClick={() => addToCart(product.id)}
 							className="bg-blue-600 text-white px-6 py-3 border-none rounded font-medium text-base cursor-pointer transition-transform duration-200 ease-in-out hover:scale-[1.01] no-underline inline-block text-center"
 						>
-							Add to Cart
+							Add to Cart {productQuantityLabel}
 						</button>
 					</div>
 				</div>
