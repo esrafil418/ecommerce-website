@@ -37,7 +37,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 			</div>
 			<div className="flex gap-2">
 				<Link
-					to=""
+					to={`/products/${product.id}`}
 					className="bg-gray-500 text-white px-6 py-3 border-none rounded font-medium text-base cursor-pointer transition-colors duration-200 ease-in-out hover:scale-[1.01] no-underline inline-block text-center"
 				>
 					View Details
