@@ -33,8 +33,49 @@ export default function CartProvider({ children }: CartProviderProps) {
 		}
 	}
 
+	function getCartItemWithProducts() {
+		return cartItem
+			.map((item) => ({
+				...item,
+				product: fetchProduct(item.id),
+			}))
+			.filter((item) => item.product);
+	}
+
+	function removeFromCart(productId) {
+		setCartItem(cartItem.filter((item) => item.id !== productId));
+	}
+
+	function updateQuantity(productId, quantity) {
+		if (quantity <= 0) {
+			removeFromCart(productId);
+			return;
+		}
+		setCartItem(
+			cartItem.map((item) =>
+				item.id === productId ? { ...item, quantity } : item,
+			),
+		);
+	}
+
+	function getCartTotal() {
+		const total = cartItem.reduce((total, item) => {
+			const product = getProductById(item.id);
+			return total + (product ? product.price * item.quantity : 0);
+		}, 0);
+		return total;
+	}
+
 	return (
-		<CartContext.Provider value={{ cartItem, addToCart }}>
+		<CartContext.Provider
+			value={{
+				cartItem,
+				addToCart,
+				removeFromCart,
+				updateQuantity,
+				getCartTotal,
+			}}
+		>
 			{children}
 		</CartContext.Provider>
 	);
